@@ -1,0 +1,12 @@
+=============================== DIGITAL LIBRARY OF NAVI MUMBAI ====================================
+---------------------------------------------------------------------------------------------------
+
+☞ Login data of all users are stored here in format:
+
+---------------------------------------------------------------------
+|     Usernames  |  Password |  Pin  |     Name      | Phone Number |
+---------------------------------------------------------------------
+
+| MyLibownadm1234 | Owner007 | 11111 | Owner Admin | 1234123412 |
+| MyLibmayjag8591 | Mayuresh | 12345 | Mayuresh Jagtap | 8591095580 |
+| MyLibgopyad8765 | Gopal123 | 12121 | Gopal Yadav | 8765728382 |
