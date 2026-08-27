@@ -381,7 +381,6 @@ def new_user():
     print("-"*44, "\n\n")
     login()
 
-#------------------------------------------------------------------------------
 # 18) Fn for login interface welcome:
 
 def welcome_user():
@@ -392,7 +391,6 @@ def welcome_user():
     print("="*100, "\n\n")
     print(F"{wel:-^100}")
 
-#------------------------------------------------------------------------------
 # 19) Fn of Important Instruction :
 
 def imp_instruction1():
@@ -401,7 +399,6 @@ def imp_instruction1():
     print("☞ Type 'exit' and press key 'enter' : Whenever you \n  want to exit the login session (except forgot password)")
     print("☞ Type 'exit' and press key 'e' : Whenever you want\n  to exit the program!")
 
-#-----------------------------------------------------------------------------
 # 20) Fn for exits :
 
 def exit_login(el):
@@ -410,8 +407,6 @@ def exit_login(el):
     if (el == "exit"):
         print("\nLogin Session exited!\n")
         login()
-    else:
-        pass
 
 
 def exit_program(ep):
@@ -419,10 +414,8 @@ def exit_program(ep):
     if (ep == "e"):
         print("\nProgram exited!\n")
         exit()
-    else:
-        pass
 
-#------------------------------------------------------------------------------
+
 # 21) Fn for Login options for Users : 
 
 def login():
@@ -448,7 +441,6 @@ def login():
         except ValueError as a:
             print("Please Enter Option Number only (ex. 1)")
 
-#------------------------------------------------------------------------------
 # 22) Fn for login date time :
 
 def login_details(u, date, time):
@@ -466,21 +458,14 @@ def login_details(u, date, time):
     data.insert(s, f"{u} | {date} | {time} | \n")
 
 
-#------------------------------------------------------------------------------
-# 22) Fn of actual library:
+# 23) Fn of actual library:
 
 def interface():
     print("\n\n\t\t\tWelcome Digital Library Of Navi Mumbai\t\t")
     print("="*100)
 
+
 #===================================================================================
 welcome_user()
 imp_instruction1()
 login()
-
-# import csv
-# data_file_path1 = r"C:\Users\HP\Desktop\training\Python\library\Users_info.csv"
-# with open(data_file_path1, "r") as file:
-#     data = csv.reader(file)
-#     for row in data:
-#         print(row[0])
