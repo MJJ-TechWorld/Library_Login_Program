@@ -464,8 +464,12 @@ def interface():
     print("\n\n\t\t\tWelcome Digital Library Of Navi Mumbai\t\t")
     print("="*100)
 
+# 24) Fn to call group of functions of login :
+
+def program():
+    welcome_user()
+    imp_instruction1()
+    login()
 
 #===================================================================================
-welcome_user()
-imp_instruction1()
-login()
+program()
