@@ -9,7 +9,7 @@
 # Please change the default path of "Data.txt" to the actual path where you have saved "Data.txt" file -
 
 data_file_path = r"C:\Users\HP\Desktop\training\Python\library\Data.txt"
-data_file_path1 = r"C:\Users\HP\Desktop\training\Python\library\Users_info.csv"
+data_file_path1 = r"C:\Users\HP\Desktop\training\Python\Library\Library Data\Users_info.csv"
 
 
 import csv
@@ -100,11 +100,9 @@ def create_pin():
                 print("-"*100)
                 break
             else:
-                print("\n⚠️ Please enter valid security pin containing 5 digits\n" \
-                "Starting digit should not 0\n") 
+                print("\n⚠️ Please enter valid security pin containing 5 digit\n") 
         except ValueError:
-            print("\n⚠️ Security pin should contain only numbers (0-9)\n" \
-            "Starting digit should not 0\n")
+            print("\n⚠️ Security pin should contain only numbers (0-9)\n")
 
 # 7) Fn for saving data of new user in "Data.txt"
 # Format : Username - Password - Pin - First name Last name - phone number \n
@@ -147,7 +145,7 @@ def check_password(u,p):
         with open(data_file_path1, "r") as file:
             data = csv.reader(file)
             for row in data:
-                if (u in row and row and row[1] == p):
+                if (row and len(row)>1 and row[0] == u  and row[1] == p):
                     print("Logged in successfully!")
                     return "yes"
             print(" ⚠️ Wrong Password")
@@ -168,7 +166,7 @@ def check_pin(u,p):
             data = csv.reader(file)
             next(data)
             for row in data:
-                if (u in row and row and row[2] == p):
+                if (row and len(row)>1 and row[0] == u  and row[2] == p):
                     print("Security Pin is correct")
                     return "yes"
                 
@@ -396,22 +394,22 @@ def welcome_user():
 def imp_instruction1():
     print("\n\n✯ Important Instructions ✯")
     print("-"*26,"\n")
-    print("☞ Type 'exit' and press key 'enter' : Whenever you \n  want to exit the login session (except forgot password)")
-    print("☞ Type 'exit' and press key 'e' : Whenever you want\n  to exit the program!")
+    print("☞ Type 'e' and press key 'enter' : Whenever you \n  want to exit the login session (except forgot password)")
+    print("☞ Type 'exit' and press key 'enter' : Whenever you want\n  to exit the program!")
 
 # 20) Fn for exits :
 
 def exit_login(el):
     exit_program(el)
     el = el.strip().lower()
-    if (el == "exit"):
+    if (el == "e"):
         print("\nLogin Session exited!\n")
         login()
 
 
 def exit_program(ep):
     ep = ep.strip().lower()
-    if (ep == "e"):
+    if (ep == "exit"):
         print("\nProgram exited!\n")
         exit()
 
