@@ -13,9 +13,9 @@ data_file_path1 = r"C:\Users\HP\Desktop\training\Python\Library\Library Data\Use
 
 
 import csv
-import colorama
+from colorama import init, Fore, Back, Style
 from datetime import datetime
-colorama.initialise
+
 #===================================================================================
 #Defining all required function :-
 #---------------------------------
@@ -426,12 +426,23 @@ def new_user():
 #------------------------------------------------
 
 def welcome_user():
-    lib_name = " - DIGITAL LIBRARY OF NAVI MUMBAI - "
-    wel = " WELCOME USER "
-    print("="*100)
-    print(f"{lib_name:*^100}")
-    print("="*100, "\n\n")
-    print(F"{wel:-^100}")
+
+    init(autoreset=True)
+    t1 = "💻          DIGITAL LIBRARY          💻"
+    t2 = "OF"
+    t3 = "🗺️           NAVI MUMBAI             🗺️"
+    t4 = "="*100
+    t5 = " "*94
+    print(f"{t5}")
+    print(Fore.CYAN + Style.BRIGHT + f"{t4}")
+    print(Fore.CYAN + Style.BRIGHT + f"|| {t5} ||")
+    print(Fore.CYAN + Style.BRIGHT + f"||{t1:^93} ||")
+    print(Fore.CYAN + Style.BRIGHT + f"|| {t5} ||")
+    print(Fore.CYAN + Style.BRIGHT + f"|| {t2:^94} ||")
+    print(Fore.CYAN + Style.BRIGHT + f"|| {t5} ||")
+    print(Fore.CYAN + Style.BRIGHT + f"||  {t3:^95} ||")
+    print(Fore.CYAN + Style.BRIGHT + f"|| {t5} ||")
+    print(Fore.CYAN + Style.BRIGHT + f"{t4}")
 
 #------------------------------------------------
 # 19) Fn of Important Instruction :
