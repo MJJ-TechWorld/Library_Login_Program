@@ -8,12 +8,14 @@
 # Please ensure that you had also cloned "Data.txt" file from program link -
 # Please change the default path of "Data.txt" to the actual path where you have saved "Data.txt" file -
 
-data_file_path = r"C:\Users\HP\Desktop\training\Python\library\Data.txt"
+data_file_path = r"C:\Users\HP\Desktop\training\Python\Library\Library Data\Login_details.txt"
 data_file_path1 = r"C:\Users\HP\Desktop\training\Python\Library\Library Data\Users_info.csv"
 
 
 import csv
-
+import colorama
+from datetime import datetime
+colorama.initialise
 #===================================================================================
 #Defining all required function :-
 #---------------------------------
@@ -32,8 +34,10 @@ def create_first_name():
         else:
             print("-"*100)
             break
-        
+
+#------------------------------------------------        
 # 2) Fn for creating last name of user :  
+#------------------------------------------------
 
 def create_last_name():
     while True:
@@ -47,9 +51,9 @@ def create_last_name():
         else:
             print("-"*100)
             break
-
+#------------------------------------------------
 # 3) Fn for creating phone number of user :
-
+#------------------------------------------------
 def create_phone_number():
     while True:
         global new_mobile_no 
@@ -62,14 +66,19 @@ def create_phone_number():
             print("-"*100)
             break
 
+#------------------------------------------------
 # 4) Fn for creating Username:
+#------------------------------------------------
+
 # Format : (MyLib) + (4 char of first name) + (4 char of last name) + (4 digit of phone no.)
 
 def create_new_username():
     global new_username
     new_username = "MyLib" + new_first_name.lower()[:4] + new_last_name.lower()[:4] + new_mobile_no[:4]
 
+#------------------------------------------------
 # 5) Fn for creating Password:
+#------------------------------------------------
 
 def create_password():
     global new_pass
@@ -85,7 +94,9 @@ def create_password():
         else:
             print("\n⚠️ Password should contain 8 characters only ⚠️\n")
 
+#------------------------------------------------
 # 6) Fn for creating Security Pin:
+#------------------------------------------------
 
 def create_pin():
     global new_pin
@@ -104,7 +115,10 @@ def create_pin():
         except ValueError:
             print("\n⚠️ Security pin should contain only numbers (0-9)\n")
 
+#------------------------------------------------
 # 7) Fn for saving data of new user in "Data.txt"
+#------------------------------------------------
+
 # Format : Username - Password - Pin - First name Last name - phone number \n
 
 def add_username_password_pin_name_phone_no():
@@ -116,7 +130,10 @@ def add_username_password_pin_name_phone_no():
         print("\n⚠️ Please ensure that you had also cloned 'Data.txt' file from program link ⚠️")
         print("⚠️ Please change the default path to the actual path where you have saved Data.txt' file, in the variable at line 11 \n")
 
+#------------------------------------------------
 # 8) Fn for checking username directly
+#------------------------------------------------
+
 def check_username(u):
     try:
         with open(data_file_path1, "r") as file:
@@ -134,7 +151,10 @@ def check_username(u):
         print("\n⚠️ Please ensure that you had also cloned 'Data' folder from program link ⚠️")
         print("⚠️ Please change the default paths to the actual paths where you have saved files, in the variable from line 11 \n")
 
+#------------------------------------------------
 # 9) Fn for checking password :
+#------------------------------------------------
+
 # How it works ?
 # a) It will take username & password as parameters 
 # b) It will first find username (of 15 char) and then moves pointer by 18
@@ -155,8 +175,10 @@ def check_password(u,p):
         print("\n⚠️ Please ensure that you had also cloned 'Data.txt' file from program link ⚠️")
         print("⚠️ Please change the default path to the actual path where you have saved Data.txt' file, in the variable at line 11 \n")
 
-
+#------------------------------------------------
 # 10) Fn for checking security pin:
+#------------------------------------------------
+
 # How it works ?
 # It will works same as for checking password only here pointer shifts by 29
 
@@ -177,7 +199,9 @@ def check_pin(u,p):
         print("\n⚠️ Please ensure that you had also cloned 'Data.txt' file from program link ⚠️")
         print("⚠️ Please change the default path to the actual path where you have saved Data.txt' file, in the variable at line 11 \n")
 
+#------------------------------------------------
 # 11) Fn for changing Password :
+#------------------------------------------------
 
 def change_password(u): 
     while True:
@@ -195,12 +219,15 @@ def change_password(u):
                     try : 
                         print("Your Password has been changed successfully!\n")    
                         with open(data_file_path1, "r") as f:
-                            store = csv.reader(f)
+                            store = list(csv.reader(f))
+                            
                             for row in store:
-                                if u in row:
+                                if row and row[0] == u:
                                     row[1] = np
+                                    break
+
                         with open(data_file_path1, "w", newline="") as f:
-                            f.writelines(store)
+                            csv.writer(f).writerows(store)
                         login()
                         break
                     except FileNotFoundError:
@@ -208,25 +235,30 @@ def change_password(u):
                         print("⚠️ Please change the default path to the actual path where you have saved Data.txt' file, in the variable at line 11 \n")
             break
 
+#------------------------------------------------
 # 12) Fn for deleting user's account details :
+#------------------------------------------------
 
 def delete_account(u):
+        logout_details(u)
         print(f"⚠️ Account with Username : {u} has been blocked due to security conern ⚠️")
         try:
             with open(data_file_path1, "r") as f:
-                store = csv.reader(f)
+                store = list(csv.reader(f))
             with open(data_file_path1, "w", newline="") as f:
                 data = csv.writer(f)
+
                 for row in store:
-                    if u in row:
-                        continue
-                data.writerow(store)
+                    if row and row[0] != u:
+                        data.writerow(row)
 
         except FileNotFoundError:
             print("\n⚠️ Please ensure that you had also cloned 'Data.txt' file from program link ⚠️")
             print("⚠️ Please change the default path to the actual path where you have saved Data.txt' file, in the variable at line 11 \n")
 
+#------------------------------------------------
 # 13) Fn for Forgot Password Option for Users :
+#------------------------------------------------
 
 def forgot_password():
     print("\n", "-"*100,"\t\t\t\t\tForgot Password\t\t\t\t\t\t\t","-"*100,"", sep ="\n")
@@ -257,7 +289,9 @@ def forgot_password():
             break
     return a
 
+#------------------------------------------------
 # 14) Fn for users to try entering password again for 3 times:
+#------------------------------------------------
 
 def try_password_again(u):
     for attempts_left in [3,2,1]:
@@ -267,13 +301,16 @@ def try_password_again(u):
         exit_login(result) # exit login session
         exit_program(result) # exit the program
         if (result == "yes"):
+            login_details(u)
             interface()
             break
         if (attempts_left == 1 and result == "no"):
             forgot_password()
             break
 
+#------------------------------------------------
 # 15) Fn giving option to User if entered wrong password :
+#------------------------------------------------
 
 def password_lock(u):
     a = "no"
@@ -309,7 +346,9 @@ def password_lock(u):
                 continue
     return a
 
+#------------------------------------------------
 # 16) Fn for those users who have username & password : 
+#------------------------------------------------
 
 def already_login():
     print("-"*100,"\n")
@@ -327,6 +366,7 @@ def already_login():
             exit_program(old_password) # exit the program
             result =  check_password(old_username,old_password)
             if (result == "yes"):
+                login_details(old_username)
                 interface()
                 break
             elif ( result == "no"):
@@ -352,8 +392,10 @@ def already_login():
 #                                              delete      change
 #                                             acccount    password 👉 login          
 #==============================================================================           
-#------------------------------------------------------------------------------
+ 
+#------------------------------------------------
 # 17) Fn for collecting details of New Users :
+#------------------------------------------------
 
 def new_user():
     title1 = " Welcome New User  "
@@ -379,7 +421,9 @@ def new_user():
     print("-"*44, "\n\n")
     login()
 
+#------------------------------------------------
 # 18) Fn for login interface welcome:
+#------------------------------------------------
 
 def welcome_user():
     lib_name = " - DIGITAL LIBRARY OF NAVI MUMBAI - "
@@ -389,7 +433,9 @@ def welcome_user():
     print("="*100, "\n\n")
     print(F"{wel:-^100}")
 
+#------------------------------------------------
 # 19) Fn of Important Instruction :
+#------------------------------------------------
 
 def imp_instruction1():
     print("\n\n✯ Important Instructions ✯")
@@ -397,13 +443,15 @@ def imp_instruction1():
     print("☞ Type 'e' and press key 'enter' : Whenever you \n  want to exit the login session (except forgot password)")
     print("☞ Type 'exit' and press key 'enter' : Whenever you want\n  to exit the program!")
 
+#------------------------------------------------
 # 20) Fn for exits :
+#------------------------------------------------
 
 def exit_login(el):
-    exit_program(el)
     el = el.strip().lower()
     if (el == "e"):
         print("\nLogin Session exited!\n")
+        logout_details(old_username)
         login()
 
 
@@ -413,8 +461,9 @@ def exit_program(ep):
         print("\nProgram exited!\n")
         exit()
 
-
+#------------------------------------------------
 # 21) Fn for Login options for Users : 
+#------------------------------------------------
 
 def login():
     dummy_var = " LOGIN PORTAL "
@@ -439,30 +488,47 @@ def login():
         except ValueError as a:
             print("Please Enter Option Number only (ex. 1)")
 
-# 22) Fn for login date time :
+#------------------------------------------------
+# 22) Fn for log in and log out date time :
+#------------------------------------------------
 
-def login_details(u, date, time):
-    f = open(data_file_path, "r")
-    data = f.readlines()
-    f.close()
+def login_details(u):
+    now = datetime.now()
+    with open(data_file_path1, "r") as f:
+        data = csv.reader(f)
+        next(data)
+        for row in data:
+            if ( row[0] == u):
+                name = row[3]
+                break 
 
-    for i in range(len(data)):
-        if ("☞ All users login timings :"):
-            l = i
-            break
+    with open(data_file_path, "a") as file:
+        data = file.write(f"{u}, {name}, Log IN at {now.strftime("%d-%m-%Y  %I:%M:%S %p")}\n")
 
-    s = l + 2
+def logout_details(u):
+    now = datetime.now()
+    with open(data_file_path1, "r") as f:
+        data = csv.reader(f)
+        next(data)
+        for row in data:
+            if ( row[0] == u):
+                name = row[3]
+                break 
 
-    data.insert(s, f"{u} | {date} | {time} | \n")
+    with open(data_file_path, "a") as file:
+        data = file.write(f"{u}, {name}, Log OUT at {now.strftime("%d-%m-%Y  %I:%M:%S %p")}\n")
 
-
+#------------------------------------------------
 # 23) Fn of actual library:
+#------------------------------------------------
 
 def interface():
     print("\n\n\t\t\tWelcome Digital Library Of Navi Mumbai\t\t")
     print("="*100)
 
+#------------------------------------------------
 # 24) Fn to call group of functions of login :
+#------------------------------------------------
 
 def program():
     welcome_user()
@@ -470,4 +536,6 @@ def program():
     login()
 
 #===================================================================================
+# Calling Actual Fuctions:
+
 program()
