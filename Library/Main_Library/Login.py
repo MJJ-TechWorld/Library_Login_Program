@@ -127,8 +127,24 @@ def check_password(u,p):
 #------------------------------------------------
 
 def login():
-    pass
+    color0 = Fore.YELLOW
+    color1 = Fore.GREEN
+    color2 = Fore.CYAN
+    color3 = Fore.MAGENTA
+    decor = "*"*36
+    print(Fore.CYAN + 
+    f'''                        ╔══════════════════════════════════════════════╗
+                        ║                                              ║
+                        ║        {color0}                                      ║
+                        ║        📚  LIBRARY MANAGEMENT SYSTEM  📚     ║
+                        ║        {color1}                                      ║
+                        ║               ( By MJJ-TECHWORLD )           ║
+                        ║                                              ║
+                        ║{color3}       {decor}   ║
+                        ║        {color2}                                      ║
+                        ╚══════════════════════════════════════════════╝''')
 
 #==================================================================================================
+
 title()
 login_portal()
