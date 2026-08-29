@@ -1,6 +1,0 @@
-    data.writerow("Nayan Sharma")
-    data.writerow("Aryan Verma")
-    data.writerow("Vinit Barma")
-    data.writerow("Mahesh Sharma")
-    data.writerow("Nayan Verma")
-    data.writerow("Anil Pandya")
