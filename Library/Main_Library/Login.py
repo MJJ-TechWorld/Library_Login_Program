@@ -12,10 +12,16 @@
 emp_data_file_path = r"C:\Users\HP\Desktop\training\Python\Employee_details.csv"
 
 #-----------------------------------------------
+# Import some important libraries : 
+#-----------------------------------------------
 
 import csv
 from colorama import init, Fore, Back, Style
 init(autoreset=True)
+
+#------------------------------------------------
+# Declaring some variables regarding colors :
+#------------------------------------------------
 
 info_color = Fore.LIGHTYELLOW_EX
 text_color = Fore.LIGHTGREEN_EX
@@ -23,11 +29,12 @@ error_color = Fore.RED + Style.BRIGHT
 noerror_color = Fore.CYAN + Style.BRIGHT
 decor1 = info_color + "*"*25 + "\n"
 decor2 = Fore.MAGENTA + "-"*101
+
 #------------------------------------------------
 #  1) Fn of displaying title :
 #------------------------------------------------
 
-def title():
+def login_title():
     a = Back.LIGHTCYAN_EX + "     "
     r = Fore.GREEN + Style.BRIGHT
     b = Fore.BLUE + Style.BRIGHT + Back.LIGHTYELLOW_EX
@@ -78,7 +85,7 @@ def login_portal():
                 print(decor2)
 
                 if check_password(username,password) == "yes":
-                    login()
+                    interface()
                     break
             break
 
@@ -123,10 +130,10 @@ def check_password(u,p):
         print(Fore.RED + Style.BRIGHT + "⚠️ Please change the default paths to the actual paths where you have saved Library Data folder, in the variable at line 12 \n")
 
 #------------------------------------------------
-#  5) Fn to call actual interface :
+#  5) Fn to create title of interface :
 #------------------------------------------------
 
-def login():
+def interface_title():
     color0 = Fore.YELLOW
     color1 = Fore.GREEN
     color2 = Fore.CYAN
@@ -144,7 +151,13 @@ def login():
                         ║        {color2}                                      ║
                         ╚══════════════════════════════════════════════╝''')
 
-#==================================================================================================
+#------------------------------------------------
+#  6) Fn to call actual interface :
+#------------------------------------------------
 
-title()
+def interface():
+    interface_title()
+    
+#==================================================================================================
+# Calling functions : 
 login_portal()
