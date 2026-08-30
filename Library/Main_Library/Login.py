@@ -184,3 +184,7 @@ def login_portal():
 # Calling functions : 
 login_portal()
 
+# from openpyxl import load_workbook
+# wb = load_workbook(r'C:\Users\HP\Desktop\training\Python\Library\Library_Data\Data.xlsx')
+# sheet = wb.active
+# wb.save(r'C:\Users\HP\Desktop\training\Python\Library\Library_Data\Data.xlsx')
