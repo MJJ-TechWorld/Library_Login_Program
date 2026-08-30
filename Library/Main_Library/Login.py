@@ -182,6 +182,7 @@ def login_portal():
 
 #==================================================================================================
 # Calling functions : 
+
 login_portal()
 
 # from openpyxl import load_workbook
