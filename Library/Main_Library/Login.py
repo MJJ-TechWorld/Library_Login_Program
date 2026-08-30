@@ -38,11 +38,12 @@ def login_title():
     a = Back.LIGHTCYAN_EX + "     "
     r = Fore.GREEN + Style.BRIGHT
     b = Fore.BLUE + Style.BRIGHT + Back.LIGHTYELLOW_EX
-    re = Fore.RED + Style.BRIGHT + Back.LIGHTMAGENTA_EX
+    re = Fore.RED  + Back.LIGHTMAGENTA_EX
     s = " "*101
     d,t1,T1,t2,t3,t4 = "*"*50,"="*91," "*85,"💻     PUBLIC LIBRARY     💻","OF","🗺️      NAVI MUMBAI       🗺️"
     t5 = "( By MJJ-TECHWORLD )"
 
+    print("\n\n")
     print(Back.LIGHTCYAN_EX + s)
     print(a,r + t1,a, sep = "")
     print(a,r + t1,a, sep = "")
@@ -59,15 +60,15 @@ def login_title():
     print(a,r + "|| ",r + T1,r + " ||",a, sep = "")
     print(a,r + t1,a, sep = "")
     print(a,r + t1,a, sep = "")
-    print(Back.LIGHTCYAN_EX + s,"\n\n")
+    print(Back.LIGHTCYAN_EX + s, "\n\n")
 
 #------------------------------------------------
-#  2) Fn for display login portal :
+#  2) Fn for displaying login options :
 #------------------------------------------------
 
-def login_portal():
+def login_display():
     global username, password
-    login_title = " LOGIN PORTAL "
+    login_title = "--- LOGIN PORTAL ---"
     print(info_color + "="*100)
     print(Fore.CYAN + f"\n{login_title:^101}\n")
     print(info_color + "*"*100 + "\n\n")
@@ -99,7 +100,7 @@ def check_username(u):
             data = csv.reader(f)
             next(data)
             for row in data:
-                if (row and row[0] == u):
+                if (row and row[1] == u):
                     print(f"\n{decor1}{noerror_color}   Username Found\n{decor1}")
                     return "yes"
                 
@@ -119,7 +120,7 @@ def check_password(u,p):
             data = csv.reader(file)
             next(data)
             for row in data:
-                if (row and len(row)>1 and row[0] == u  and row[1] == p):
+                if (row and len(row)>1 and row[1] == u  and row[2] == p):
                     print(f"\n{decor1}{noerror_color}  Logged in successfully!\n{decor1}")
                     return "yes"
 
@@ -134,6 +135,8 @@ def check_password(u,p):
 #------------------------------------------------
 
 def interface_title():
+    print(decor2)
+    print(decor2, "\n")
     color0 = Fore.YELLOW
     color1 = Fore.GREEN
     color2 = Fore.CYAN
@@ -151,13 +154,33 @@ def interface_title():
                         ║        {color2}                                      ║
                         ╚══════════════════════════════════════════════╝''')
 
+    print(decor2,"\n\n")
 #------------------------------------------------
-#  6) Fn to call actual interface :
+#   ) Fn to display actions' options :
+#------------------------------------------------
+
+def actions():
+    print("\n\tNew Buyer ?\n")
+    print("1. Buy book(s) ")
+
+    print()
+
+#------------------------------------------------
+#   ) Fn to call actual interface :
 #------------------------------------------------
 
 def interface():
     interface_title()
-    
+
+#------------------------------------------------
+#   ) Fn for actual login portal
+#------------------------------------------------
+
+def login_portal():
+    login_title()
+    login_display()
+
 #==================================================================================================
 # Calling functions : 
 login_portal()
+
