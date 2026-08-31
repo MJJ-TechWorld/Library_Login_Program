@@ -28,7 +28,7 @@ from datetime import datetime, timedelta
 #------------------------------------------------
 
 info_color = Fore.LIGHTYELLOW_EX
-text_color = Fore.LIGHTGREEN_EX
+text_color = Fore.GREEN
 error_color = Fore.RED + Style.BRIGHT
 noerror_color = Fore.CYAN + Style.BRIGHT
 decor1 = info_color + "*"*55 + "\n"
@@ -201,17 +201,22 @@ def rent_book_directly():
         print(decor2)
         unique_code = input(f"{text_color}Enter the unique code of desire book : ")
         print(decor2)
+
         wb = load_workbook(books_data_path)
         sheet_names = wb.worksheets
         for sheet in sheet_names:
             for row in sheet.iter_rows(min_row=2,min_col=2,values_only=False):
                 for cell in row:
                     if unique_code in str(cell.value):
-                        print(f"{decor1}{noerror_color}Book Found with this unique code\n{decor1}")
-                        record_rent_book_detail(unique_code)
-                        break
-                    else:
-                        print(f"{decor1}{error_color}Book with this unique code not found\n{decor1}")
+                        a = 1
+
+        if a == 1:
+            print(f"{decor1}{noerror_color}Book Found with this unique code\n{decor1}")
+            record_rent_book_detail(unique_code)
+            break
+        else:
+            print(f"{decor1}{error_color}Book with this unique code not found\n{decor1}")
+
 
 #------------------------------------------------
 #   ) Fn to record details of book rented : 
@@ -280,16 +285,16 @@ def record_rent_book_detail(uc):
             issue_date = now_date.strftime('%d-%m-%Y')
             due_date = then_date.strftime('%d-%m-%Y')
             import openpyxl
-            wb = openpyxl.load_workbook(data_path, data_only=True)
+            wb = openpyxl.load_workbook(books_data_path, data_only=True)
             for s in wb.worksheets:
-                for row in s.iter_rows(min_row=2,min_col=2,max_col=2,values_only=False):
+                for row in s.iter_rows(min_row=2,values_only=False):
                     for cell in row:
                         if uc in str(cell.value):
                             e = 1
-                            wd = openpyxl.load_workbook(books_data_path)
+                            wd = openpyxl.load_workbook(data_path)
                             sheet = wd.active
                             sheet.append([f"{first_name} {last_name}",row[1].value, row[2].value, row[3].value, row[6].value, int(quantity), row[8].value, issue_date, int(tenure), due_date, int(quantity)*int(row[8].value)])
-                            wd.save(books_data_path)
+                            wd.save(data_path)
 
         except FileNotFoundError:
             print(filenoterror)
