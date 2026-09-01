@@ -37,7 +37,7 @@ decor2 = Fore.MAGENTA + "-"*101
 decor3 = info_color + "*"*101
 decor4 = info_color + "*"*60
 filenoterror = f"{Fore.RED + Style.BRIGHT}\n⚠️ Please ensure that you had also cloned 'Library Data' folder from program link ⚠️\n{Fore.RED + Style.BRIGHT}⚠️ Please change the default paths to the actual paths where you have saved Library Data folder, in the variable at line 12 \n"
-filecloseerror = f""
+filecloseerror = f"{decor1}{error_color}Please ensure that you have closed books_data excel file & data excel file ! \n{decor1}"
 genres_code = ["MYTH", "CRIMYS", "ROMNC", "BIOGR", "HIS", "NOV", "ECOCIV", "POET", "POLYSC", "MOTV"]
 align_centre = Alignment(horizontal='center', vertical='center')
 
@@ -276,11 +276,10 @@ def display_actions():
     Returns:
         None
     """
-    print(f"\t{info_color}{underline('Available actions')} : \n")
-    print(f"{noerror_color}1. Search for Unique Code of Book(s) ?")
-    print(f"{noerror_color}2. Rent Book(s) for rental customers?")
-    print(f"{noerror_color}3. Rent Book(s) for premium members? \n")
-
+    print(f"{info_color}{underline('Available actions')} : \n")
+    print(f"\t{noerror_color}1. Search for Unique Code of Book(s) ?")
+    print(f"\t{noerror_color}2. Rent Book(s) for rental customers?")
+    print(f"\t{noerror_color}3. Rent Book(s) for premium members? \n")
 
     while True:
         print(decor2)
@@ -467,16 +466,116 @@ def rent_by_uc():
         else:
             print(f"\n{error_color}⚠️ Book with this unique code not found !\n")
 
+#------------------------------------------------
+#   ) Fn to ask to rent more books or not :
+# #------------------------------------------------
+
+def ask_add_more(fn,ln,pn):
+    print(f"{info_color}{underline('Want to rent more books ?')}\n")
+    print(f"\t{noerror_color}1. Yes")
+    print(f"\t{noerror_color}2. No")
+
+    while True:
+        print(decor2)
+        sel_option = input("Select above option number to proceed further : ").strip()
+        if sel_option == "1":
+            print(decor2)
+            add_more(fn,ln,pn)
+            break
+
+        if sel_option == "2":
+            print(decor2)
+            break
+
+        else :
+            print(f"\n{error_color} ⚠️ Please Enter Correct Option Number (ex. 1 or 2)!\n")
+
+#------------------------------------------------
+#   ) Fn to rent more books : 
+#------------------------------------------------
+
+def add_more(fn,ln,pn):
+    a,b,c= 0,0,0 # initializing
+    while True:
+        print(decor2)
+        unique_code = input(f"{text_color}Enter the unique code of desire book : ")
+        print(decor2)
+
+        details = []
+        wb = load_workbook(books_data_path)
+        for sheet in wb.worksheets:
+            for row in sheet.iter_rows(min_row=2,values_only=False):
+                for cell in row:
+                   if unique_code in str(cell.value):
+                       a = 1
+                       details.append(f"{row[1].value} | Name : {row[2].value} | Author : {row[3].value} | Language : {row[4].value}")
+
+        if a == 1:
+            print(f"\n{noerror_color}✅ Book Found with this unique code {details[0]} \n")
+            record_rent_book_detail(unique_code)
+            while True:
+                print(decor2)
+                tenure = input(text_color + "Enter borrowing period days : ")
+                print(decor2)
+
+                if tenure.isdigit() == True:
+                    b = 1
+                    break
+                else:
+                    print(f"{decor1}{error_color}Please enter valid number of days (ex. 3 or 5)\n{decor1}")
+                    b = 0
+
+        if b == 1:
+            try:
+                now_date = datetime.today()
+                then_date = now_date + timedelta(days=int(tenure))
+                issue_date = now_date.strftime('%d-%m-%Y')
+                due_date = then_date.strftime('%d-%m-%Y')
+                import openpyxl
+                wb = openpyxl.load_workbook(books_data_path, data_only=True)
+                for s in wb.worksheets:
+                    for row in s.iter_rows(min_row=2,values_only=False):
+                        for cell in row:
+                            if unique_code in str(cell.value):
+                                c = 1
+                                wd = load_workbook(data_path)
+                                sheet = wd.active
+                                sheet.append([f"{fn} {ln}",f"{int(pn)}",row[1].value, row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value)])
+                                cell.alignment = align_centre
+                                wd.save(data_path)
+                if c == 1:
+                    ask_add_more(fn,ln,pn)
+
+            except FileNotFoundError:
+                print(filenoterror)
+
+            except PermissionError:
+                print(filecloseerror)
+
+
+
+
+
+
+
+
+            break
+        else:
+            print(f"\n{error_color}⚠️ Book with this unique code not found !\n")
+
+
+
 
 #------------------------------------------------
 #   ) Fn to record details of book rented : 
 #------------------------------------------------
 
 def record_rent_book_detail(uc):
+    d,e = 0,0
     renter_data = create_renter_detail()
     if renter_data[0] == 1:
-        while True:
 
+        while True:
             print(decor2)
             tenure = input(text_color + "Enter borrowing period days : ")
             print(decor2)
@@ -506,12 +605,15 @@ def record_rent_book_detail(uc):
                             sheet.append([f"{renter_data[1]} {renter_data[2]}",f"{int(renter_data[3])}",row[1].value, row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value)])
                             cell.alignment = align_centre
                             wd.save(data_path)
+            if e == 1:
+                ask_add_more(renter_data[1], renter_data[2], renter_data[3])
+
 
         except FileNotFoundError:
             print(filenoterror)
 
         except PermissionError:
-            print(f"{decor1}{error_color}Please ensure that you have closed books_data excel file & data excel file ! \n{decor1}")
+            print(filecloseerror)
 
 #------------------------------------------------
 #   ) Fn to call functions after login : 
