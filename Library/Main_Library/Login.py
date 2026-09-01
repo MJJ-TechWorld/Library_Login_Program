@@ -470,7 +470,7 @@ def rent_by_uc():
 #   ) Fn to ask to rent more books or not :
 # #------------------------------------------------
 
-def ask_add_more(fn,ln,pn):
+def ask_add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r):
     print(f"{info_color}{underline('Want to rent more books ?')}\n")
     print(f"\t{noerror_color}1. Yes")
     print(f"\t{noerror_color}2. No")
@@ -480,11 +480,12 @@ def ask_add_more(fn,ln,pn):
         sel_option = input("Select above option number to proceed further : ").strip()
         if sel_option == "1":
             print(decor2)
-            add_more(fn,ln,pn)
+            add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r)
             break
 
         if sel_option == "2":
             print(decor2)
+            bill_printer(fn,ln,pn,cl,bl,al,Cl,tl,t,r)
             break
 
         else :
@@ -494,8 +495,9 @@ def ask_add_more(fn,ln,pn):
 #   ) Fn to rent more books : 
 #------------------------------------------------
 
-def add_more(fn,ln,pn):
-    a,b,c= 0,0,0 # initializing
+def add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r):
+    # initializing
+    a,b,c = 0,0,0
     while True:
         print(decor2)
         unique_code = input(f"{text_color}Enter the unique code of desire book : ")
@@ -512,7 +514,6 @@ def add_more(fn,ln,pn):
 
         if a == 1:
             print(f"\n{noerror_color}✅ Book Found with this unique code {details[0]} \n")
-            record_rent_book_detail(unique_code)
             while True:
                 print(decor2)
                 tenure = input(text_color + "Enter borrowing period days : ")
@@ -540,25 +541,25 @@ def add_more(fn,ln,pn):
                                 c = 1
                                 wd = load_workbook(data_path)
                                 sheet = wd.active
+                                print(row[1].value, row[8].value, pn, tenure)
                                 sheet.append([f"{fn} {ln}",f"{int(pn)}",row[1].value, row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value)])
-                                cell.alignment = align_centre
+                                cl.append(row[1].value)
+                                bl.append(row[2].value)
+                                al.append(row[3].value)
+                                Cl.append(int(row[8].value))
+                                tl.append(int(tenure))
+                                t.append(int(tenure)*int(row[8].value))
+                                for cell in sheet[sheet.max_row]:
+                                    cell.alignment = align_centre
                                 wd.save(data_path)
                 if c == 1:
-                    ask_add_more(fn,ln,pn)
+                    ask_add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r)
 
             except FileNotFoundError:
                 print(filenoterror)
 
             except PermissionError:
                 print(filecloseerror)
-
-
-
-
-
-
-
-
             break
         else:
             print(f"\n{error_color}⚠️ Book with this unique code not found !\n")
@@ -571,7 +572,7 @@ def add_more(fn,ln,pn):
 #------------------------------------------------
 
 def record_rent_book_detail(uc):
-    d,e = 0,0
+    d,e,code_list,book_list,author_list,charges_list,tenure_list,total,r = 0,0,[],[],[],[],[],[],"NO"
     renter_data = create_renter_detail()
     if renter_data[0] == 1:
 
@@ -580,7 +581,7 @@ def record_rent_book_detail(uc):
             tenure = input(text_color + "Enter borrowing period days : ")
             print(decor2)
 
-            if tenure.isdigit() == True:
+            if tenure.isdigit() == True and tenure != "0":
                 d = 1
                 break
             else:
@@ -602,11 +603,18 @@ def record_rent_book_detail(uc):
                             e = 1
                             wd = load_workbook(data_path)
                             sheet = wd.active
-                            sheet.append([f"{renter_data[1]} {renter_data[2]}",f"{int(renter_data[3])}",row[1].value, row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value)])
-                            cell.alignment = align_centre
+                            sheet.append([f"{renter_data[1]} {renter_data[2]}",int(renter_data[3]),row[1].value, row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value)])
+                            code_list.append(row[1].value)
+                            book_list.append(row[2].value)
+                            author_list.append(row[3].value)
+                            charges_list.append(int(row[8].value))
+                            tenure_list.append(int(tenure))
+                            total.append(int(tenure)*int(row[8].value))
+                            for cell in sheet[sheet.max_row]:
+                                cell.alignment = align_centre
                             wd.save(data_path)
             if e == 1:
-                ask_add_more(renter_data[1], renter_data[2], renter_data[3])
+                ask_add_more(renter_data[1], renter_data[2], renter_data[3],code_list,book_list,author_list,charges_list,tenure_list,total,r)
 
 
         except FileNotFoundError:
@@ -614,6 +622,46 @@ def record_rent_book_detail(uc):
 
         except PermissionError:
             print(filecloseerror)
+
+#------------------------------------------------
+#   ) Fn to print bill of books rented : 
+#------------------------------------------------
+
+def bill_printer(fn,ln,pn,cl,bl,al,Cl,tl,t,r):
+
+    bill_tiltle1 = "DIGITAL LIBRARY OF NAVI MUMBAI"
+    bill_tiltle2 = "( By MJJ-TechWorld )"
+    l1 = "Name Of Books"
+    l2 = "Name Of Authors"
+    l3 = "Charges/day"
+    l4 = "Tenure"
+    l5 = "Total"
+
+    title_text1 = Fore.BLUE
+    title_text2 = Fore.RED 
+    tc = Fore.YELLOW
+    line = Fore.CYAN
+    d = line + "║"
+
+
+    print(line + "═"*100)
+    print(d," "*98,d, sep = "")
+    print(f"{d}{title_text1}{bill_tiltle1:^98}{d}")
+    print(d," "*29,Fore.MAGENTA + "-"*40," "*29,d, sep = "")
+    print(d," "*98,d, sep = "")
+    print(f"{d}{title_text2}{bill_tiltle2:^98}{d}")
+    print(d,Fore.MAGENTA + "*"*98,d, sep = "")
+    print(d," "*98,d, sep = "")
+    print(d," "*98,d, sep = "")
+    print(f"{d} Sr. Unique Code{d}{l1:^36}{d}{l2:^25}{d}{l3:^5}{d}{l4:^6}{d}{l5:^5} {d}")
+
+
+
+    for i in range(len(cl)):
+        print(f"{d} {i+1:^3}. {cl[i]:^12}{d}{bl[i]:^36}{d}{al[i]:^25}{d}{Cl[i]:^5}{d}{tl[i]:^5}{d}{t[i]:^5} {d}")
+
+    print(d," "*98,d, sep = "")
+    print(line + "═"*100)
 
 #------------------------------------------------
 #   ) Fn to call functions after login : 
@@ -783,6 +831,7 @@ def id():
 # Calling functions : 
 
 start_program()
+
 
 # take_sheet_name()
 # first_name = input("Enter first name : ")
