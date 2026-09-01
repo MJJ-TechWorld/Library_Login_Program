@@ -655,8 +655,6 @@ def bill_printer(fn,ln,pn,cl,bl,al,Cl,tl,t,r):
     print(d," "*98,d, sep = "")
     print(f"{d} Sr. Unique Code{d}{l1:^36}{d}{l2:^25}{d}{l3:^5}{d}{l4:^6}{d}{l5:^5} {d}")
 
-
-
     for i in range(len(cl)):
         print(f"{d} {i+1:^3}. {cl[i]:^12}{d}{bl[i]:^36}{d}{al[i]:^25}{d}{Cl[i]:^5}{d}{tl[i]:^5}{d}{t[i]:^5} {d}")
 
@@ -726,25 +724,6 @@ def display_genres():
 #    ) Fn to c
 #------------------------------------------------
 
-# def call():
-#     while True : 
-#         print("\tChoose way to find book(s)")
-#         print("1. Search by name of book")
-#         print("2. Search by name of author of book")
-#         print("3. Search by Date of Publish of book")
-
-#         sel_option = input("\nSelect option to proceed further : ")
-
-#         if sel_option == "1":
-#             check_book_name()
-#             break
-#         if sel_option == "2":
-#             check_author_name()
-#             break
-#         if sel_option == "3":
-#             check_publish_date()
-#             break
-
 # def check_author_name():
 #     while True:
 #         print(decor2)
@@ -786,6 +765,27 @@ def display_genres():
 #             break
 #         else : 
 #             print(f"{decor1}{error_color}Book(s) with this 'Date Of Publish' Not Found\n{decor1}")
+
+
+# def call():
+#     while True : 
+#         print("\tChoose way to find book(s)")
+#         print("1. Search by name of book")
+#         print("2. Search by name of author of book")
+#         print("3. Search by Date of Publish of book")
+
+#         sel_option = input("\nSelect option to proceed further : ")
+
+#         if sel_option == "1":
+#             check_book_name()
+#             break
+#         if sel_option == "2":
+#             check_author_name()
+#             break
+#         if sel_option == "3":
+#             check_publish_date()
+#             break
+
 
 def id():
     first_name = input("Enter first name : ")
