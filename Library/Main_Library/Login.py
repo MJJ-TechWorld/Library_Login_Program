@@ -20,6 +20,7 @@ pre_mem_path = r"C:\Users\HP\Desktop\training\Python\Library\Library_Data\Pre_me
 
 import csv
 import random
+import openpyxl
 from colorama import init, Fore, Back, Style
 init(autoreset=True)
 from openpyxl import load_workbook
@@ -552,7 +553,6 @@ def add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r="NO"):
                 then_date = now_date + timedelta(days=int(tenure))
                 issue_date = now_date.strftime('%d-%m-%Y')
                 due_date = then_date.strftime('%d-%m-%Y')
-                import openpyxl
                 wb = openpyxl.load_workbook(books_data_path, data_only=True)
                 for s in wb.worksheets:
                     for row in s.iter_rows(min_row=2,values_only=False):
@@ -561,6 +561,9 @@ def add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r="NO"):
                                 c = 1
                                 wd = load_workbook(data_path)
                                 sheet = wd[sn]
+                                print(row[8].value)
+                                print(type(row[8].value))
+                                print(row[8])
                                 sheet.append([f"{fn} {ln}",f"{int(pn)}",row[1].value, row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value),"NO"])
                                 cl.append(row[1].value)
                                 bl.append(row[2].value)
@@ -571,6 +574,7 @@ def add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r="NO"):
                                 for cell in sheet[sheet.max_row]:
                                     cell.alignment = align_centre
                                 wd.save(data_path)
+                                mod_books(cl,sn,"NO")
                 if c == 1:
                     ask_add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r)
 
@@ -613,15 +617,17 @@ def record_rent_book_detail(uc):
             then_date = now_date + timedelta(days=int(tenure))
             issue_date = now_date.strftime('%d-%m-%Y')
             due_date = then_date.strftime('%d-%m-%Y')
-            import openpyxl
-            wb = openpyxl.load_workbook(books_data_path, data_only=True)
+            wb = openpyxl.load_workbook(books_data_path,data_only=True)
             for s in wb.worksheets:
                 for row in s.iter_rows(min_row=2,values_only=False):
                     for cell in row:
                         if uc in str(cell.value):
                             e = 1
                             wd = load_workbook(data_path)
-                            sheet = wd.active
+                            sheet = wd["Sheet1"]
+                            print(row[8].value)
+                            print(type(row[8].value))
+                            print(row[8])
                             sheet.append([f"{renter_data[1]} {renter_data[2]}",int(renter_data[3]),row[1].value, row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value), "NO"])
                             code_list.append(row[1].value)
                             book_list.append(row[2].value)
@@ -632,6 +638,7 @@ def record_rent_book_detail(uc):
                             for cell in sheet[sheet.max_row]:
                                 cell.alignment = align_centre
                             wd.save(data_path)
+                            mod_books(code_list,"Sheet1","NO")
             if e == 1:
                 ask_add_more(renter_data[1], renter_data[2], renter_data[3],code_list,book_list,author_list,charges_list,tenure_list,total,r="NO")
 
@@ -678,7 +685,7 @@ def bill_printer(fn,ln,pn,cl,bl,al,Cl,tl,t,r):
     print(d,Fore.MAGENTA + "*"*108,d, sep = "")
     print(d," "*108,d, sep = "")
     print(f"{d} {text_color} Name: {tc}{name:<82}{l6}  {d}")
-    print(f"{d} {text_color} Mobile No : {tc}{name:<71}{l7}  {d}")
+    print(f"{d} {text_color} Mobile No : {tc}{pn:<71}{l7}  {d}")
     print(d," "*108,d, sep = "")
     print(f"{d} Sr. Unique Code{d}{l1:^36}{d}{l2:^25}{d}{l3:^5}{d}{l4:^6}{d}{l5:^5} {d}")
 
@@ -798,12 +805,13 @@ def return_books(m):
             wb = load_workbook(data_path, data_only=True)
             sheet = wb[m]
             for row in sheet.iter_rows(min_row=2,values_only=True):
-                if name.strip().lower() == str(row[2]).strip().lower():
-                    (decor2)
-                    print(f"Name : {row[0]}  |  Phone Number : {row[1]}")
+                if name.strip().lower() == str(row[0]).strip().lower():
+                    print(decor2)
+                    print(f"{Fore.YELLOW}Name : {row[0]}  |  Phone Number : {row[1]}")
                     pn,c = row[1],1
                 else:
                     print("ell")
+                    print(row[2])
 
             wb.save(data_path)
     
@@ -821,43 +829,47 @@ def return_books(m):
                     books = rbooks.replace(" ","")
                     book_list = books.split(",")
                     for book in book_list:
-                        wd = load_workbook(data_path, data_only=True)
+                        wd = load_workbook(data_path, data_only=False)
                         sheet = wd[m]
-                        for row in sheet.iter_rows(min_row=2,values_only=True):
-                            if book == str(row[2]).strip() and str(row[11]) == "NO":
+                        for row in sheet.iter_rows(min_row=2):
+                            if book.strip() == str(row[2].value) and str(row[11].value) == "NO":
                                 row[11].value = "YES"
+                                mod_books(book_list,m,"YES")
                             else:
                                 d = 1
+                                #print(row[2],row[11])
                                 nf.append(book)
     
                         wd.save(data_path)
                     break
                 else:
+                    print(pn)
                     print(f"\n{error_color}⚠️ Invalid phone number \n")
 
             print(f"\n{noerror_color}✅  Records Updated successfully !\n")
     if d == 1:
-        er = ""
-        for i in nf:
-            er = er + "," + i
-            print(f"\n{error_color}⚠️ Note that book with uc : {er} not found !\n")
+        er =str(nf).replace("[","")
+        er = er.replace("]","")
+        print(f"\n{error_color}⚠️  Note that book with uc : {er} not found !\n")
 
 #------------------------------------------------
 #   ) Fn to call functions after login : 
 #------------------------------------------------
 
-
 def mod_books(l,s,r):
     for book in l:
         wd = load_workbook(books_data_path, data_only=True)
-        sheet = wd[s]
-        for row in sheet.iter_rows(min_row=2,values_only=True):
-            if book == str(row[1]):
-                if r == "NO":
-                    row[7].value = int(row[7].value) - 1
-                elif r == "YES":
-                    row[7].value = int(row[7].value) + 1
-    
+
+        wd = load_workbook(books_data_path)
+        for sheet in wd.worksheets:
+            for row in sheet.iter_rows(min_row=2,values_only=False):
+                if book == str(row[1].value):
+                    if r == "NO":
+                        row[7].value = int(row[7].value) - 1
+                    elif r == "YES":
+                        row[7].value = int(row[7].value) + 1
+        wd.save(books_data_path)
+
 #------------------------------------------------
 #   ) Fn to call functions after login : 
 #------------------------------------------------
