@@ -655,9 +655,6 @@ def record_rent_book_detail(uc):
 
 def bill_printer(fn,ln,pn,cl,bl,al,Cl,tl,t,r):
 
-
-#╔╗╚╝ 
-
     bill_tiltle1 = "📚   DIGITAL LIBRARY OF NAVI MUMBAI   📚"
     bill_tiltle2 = "( By MJJ-TechWorld )"
     l1 = "Name Of Books"
@@ -910,24 +907,6 @@ def display_genres():
         print(Fore.RED + Style.BRIGHT + "\n⚠️ Please ensure that you had also cloned 'Library Data' folder from program link ⚠️")
         print(Fore.RED + Style.BRIGHT + "⚠️ Please change the default paths to the actual paths where you have saved Library Data folder, in the variable at line 12 \n")
 
-#------------------------------------------------
-#    ) Fn to go to the desire sheet :
-#------------------------------------------------
-
-# def take_sheet_name():
-#     display_genres()
-#     while True :
-#         print(decor2)
-#         sheet_name = input(text_color + "Enter exact genre of book as given in above table : ").strip()
-#         print(decor2)
-#         if sheet_name in sheet_names:
-#             print(f"{decor1}{noerror_color}Genre Of Book Found\n{decor1}")
-#             wb = load_workbook(r'C:\Users\HP\Desktop\training\Python\Library\Library_Data\Books_Data.xlsx', data_only=True)
-#             sheet = wb[sheet_name]
-#             call()
-#             break
-#         else:
-#             print(f"{decor1}{error_color}Please enter exact genre of book as given in above table\n{decor1}")
 
 #------------------------------------------------
 #    ) Fn to c
@@ -1068,3 +1047,21 @@ start_program()
 # sheet["G2"] = int(d[6])*int(q)
 # wb.save(r'C:\Users\HP\Desktop\training\Python\Library\Library_Data\Data.xlsx')
 
+#------------------------------------------------
+#    ) Fn to go to the desire sheet :
+#------------------------------------------------
+
+# def take_sheet_name():
+#     display_genres()
+#     while True :
+#         print(decor2)
+#         sheet_name = input(text_color + "Enter exact genre of book as given in above table : ").strip()
+#         print(decor2)
+#         if sheet_name in sheet_names:
+#             print(f"{decor1}{noerror_color}Genre Of Book Found\n{decor1}")
+#             wb = load_workbook(r'C:\Users\HP\Desktop\training\Python\Library\Library_Data\Books_Data.xlsx', data_only=True)
+#             sheet = wb[sheet_name]
+#             call()
+#             break
+#         else:
+#             print(f"{decor1}{error_color}Please enter exact genre of book as given in above table\n{decor1}")
