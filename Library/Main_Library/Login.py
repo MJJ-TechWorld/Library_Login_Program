@@ -9,15 +9,17 @@
 # Please ensure that you had also cloned "Data.txt" file from program link -
 # Please change the default path of "Data.txt" to the actual path where you have saved "Data.txt" file -
 
-emp_data_file_path = r"C:\Users\HP\Desktop\training\Python\Library\Library_Data\Employee_details.csv"
+emp_data_path = r"C:\Users\HP\Desktop\training\Python\Library\Library_Data\Employee_details.csv"
 books_data_path = r"C:\Users\HP\Desktop\training\Python\Library\Library_Data\Books_Data.xlsx"
 data_path = r"C:\Users\HP\Desktop\training\Python\Library\Library_Data\Data.xlsx"
+pre_mem_path = r"C:\Users\HP\Desktop\training\Python\Library\Library_Data\Pre_members_info.csv"
 
 #-----------------------------------------------
 # Import some important libraries : 
 #-----------------------------------------------
 
 import csv
+import random
 from colorama import init, Fore, Back, Style
 init(autoreset=True)
 from openpyxl import load_workbook
@@ -33,8 +35,8 @@ text_color = Fore.GREEN
 error_color = Fore.RED + Style.BRIGHT
 noerror_color = Fore.CYAN + Style.BRIGHT
 decor1 = info_color + "*"*55 + "\n"
-decor2 = Fore.MAGENTA + "-"*101
-decor3 = info_color + "*"*101
+decor2 = Fore.MAGENTA + "-"*111
+decor3 = info_color + "*"*111
 decor4 = info_color + "*"*60
 filenoterror = f"{Fore.RED + Style.BRIGHT}\n⚠️ Please ensure that you had also cloned 'Library Data' folder from program link ⚠️\n{Fore.RED + Style.BRIGHT}⚠️ Please change the default paths to the actual paths where you have saved Library Data folder, in the variable at line 12 \n"
 filecloseerror = f"{decor1}{error_color}Please ensure that you have closed books_data excel file & data excel file ! \n{decor1}"
@@ -139,7 +141,7 @@ def check_username(u):
         str: "yes" for correct username, "no" for wrong username. 
     """
     try:
-        with open(emp_data_file_path, "r") as f:
+        with open(emp_data_path, "r") as f:
             data = csv.reader(f)
             next(data)
             for row in data:
@@ -171,7 +173,7 @@ def check_password(u,p):
         str: "yes" for correct password, "no" for incorrect password.
     """
     try: 
-        with open(emp_data_file_path, "r") as file:
+        with open(emp_data_path, "r") as file:
             data = csv.reader(file)
             next(data)
             for row in data:
@@ -280,6 +282,8 @@ def display_actions():
     print(f"\t{noerror_color}1. Search for Unique Code of Book(s) ?")
     print(f"\t{noerror_color}2. Rent Book(s) for rental customers?")
     print(f"\t{noerror_color}3. Rent Book(s) for premium members? \n")
+    print(f"\t{noerror_color}4. Return Book(s) of rental customers? \n")
+    print(f"\t{noerror_color}5. Return Book(s) of premium members? \n")
 
     while True:
         print(decor2)
@@ -297,7 +301,17 @@ def display_actions():
 
         if sel_option == "3":
             print(decor2)
-            rent_by_uc()
+            pre_mem()
+            break
+
+        if sel_option == "4":
+            print(decor2)
+            return_books("Sheet1")
+            break
+
+        if sel_option == "5":
+            print(decor2)
+            return_books("Sheet2")
             break
 
         else :
@@ -445,6 +459,7 @@ def search_uc():
 
 def rent_by_uc():
     a = 0 # initializing
+    s = " "*35
     while True:
         print(decor2)
         unique_code = input(f"{text_color}Enter the unique code of desire book : ")
@@ -455,9 +470,9 @@ def rent_by_uc():
         for sheet in wb.worksheets:
             for row in sheet.iter_rows(min_row=2,values_only=False):
                 for cell in row:
-                   if unique_code in str(cell.value):
+                   if unique_code == str(cell.value):
                        a = 1
-                       details.append(f"{row[1].value} | Name : {row[2].value} | Author : {row[3].value} | Language : {row[4].value}")
+                       details.append(f"{row[1].value} | Name : {row[2].value} |\n{s} Author : {row[3].value} |Language : {row[4].value}")
 
         if a == 1:
             print(f"\n{noerror_color}✅ Book Found with this unique code {details[0]} \n")
@@ -495,9 +510,14 @@ def ask_add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r):
 #   ) Fn to rent more books : 
 #------------------------------------------------
 
-def add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r):
+def add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r="NO"):
     # initializing
     a,b,c = 0,0,0
+    s = " "*35
+    if r == "NO":
+        sn = "Sheet1"
+    elif r == "YES":
+        sn = "Sheet2"
     while True:
         print(decor2)
         unique_code = input(f"{text_color}Enter the unique code of desire book : ")
@@ -508,9 +528,9 @@ def add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r):
         for sheet in wb.worksheets:
             for row in sheet.iter_rows(min_row=2,values_only=False):
                 for cell in row:
-                   if unique_code in str(cell.value):
+                   if unique_code == str(cell.value):
                        a = 1
-                       details.append(f"{row[1].value} | Name : {row[2].value} | Author : {row[3].value} | Language : {row[4].value}")
+                       details.append(f"{row[1].value} | Name : {row[2].value} |\n{s} Author : {row[3].value} | Language : {row[4].value}")
 
         if a == 1:
             print(f"\n{noerror_color}✅ Book Found with this unique code {details[0]} \n")
@@ -540,9 +560,8 @@ def add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r):
                             if unique_code in str(cell.value):
                                 c = 1
                                 wd = load_workbook(data_path)
-                                sheet = wd.active
-                                print(row[1].value, row[8].value, pn, tenure)
-                                sheet.append([f"{fn} {ln}",f"{int(pn)}",row[1].value, row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value)])
+                                sheet = wd[sn]
+                                sheet.append([f"{fn} {ln}",f"{int(pn)}",row[1].value, row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value),"NO"])
                                 cl.append(row[1].value)
                                 bl.append(row[2].value)
                                 al.append(row[3].value)
@@ -572,7 +591,7 @@ def add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r):
 #------------------------------------------------
 
 def record_rent_book_detail(uc):
-    d,e,code_list,book_list,author_list,charges_list,tenure_list,total,r = 0,0,[],[],[],[],[],[],"NO"
+    d,e,code_list,book_list,author_list,charges_list,tenure_list,total = 0,0,[],[],[],[],[],[]
     renter_data = create_renter_detail()
     if renter_data[0] == 1:
 
@@ -603,7 +622,7 @@ def record_rent_book_detail(uc):
                             e = 1
                             wd = load_workbook(data_path)
                             sheet = wd.active
-                            sheet.append([f"{renter_data[1]} {renter_data[2]}",int(renter_data[3]),row[1].value, row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value)])
+                            sheet.append([f"{renter_data[1]} {renter_data[2]}",int(renter_data[3]),row[1].value, row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value), "NO"])
                             code_list.append(row[1].value)
                             book_list.append(row[2].value)
                             author_list.append(row[3].value)
@@ -614,7 +633,7 @@ def record_rent_book_detail(uc):
                                 cell.alignment = align_centre
                             wd.save(data_path)
             if e == 1:
-                ask_add_more(renter_data[1], renter_data[2], renter_data[3],code_list,book_list,author_list,charges_list,tenure_list,total,r)
+                ask_add_more(renter_data[1], renter_data[2], renter_data[3],code_list,book_list,author_list,charges_list,tenure_list,total,r="NO")
 
 
         except FileNotFoundError:
@@ -629,38 +648,216 @@ def record_rent_book_detail(uc):
 
 def bill_printer(fn,ln,pn,cl,bl,al,Cl,tl,t,r):
 
-    bill_tiltle1 = "DIGITAL LIBRARY OF NAVI MUMBAI"
+
+#╔╗╚╝ 
+
+    bill_tiltle1 = "📚   DIGITAL LIBRARY OF NAVI MUMBAI   📚"
     bill_tiltle2 = "( By MJJ-TechWorld )"
     l1 = "Name Of Books"
     l2 = "Name Of Authors"
     l3 = "Charges/day"
     l4 = "Tenure"
     l5 = "Total"
-
+    tc = Fore.YELLOW
+    l6 = f"{text_color}Date: {tc}{datetime.today().strftime('%d-%m-%Y')}"
+    name = f"{fn} {ln}"
+    l7 = f"{text_color}Have membership ? {tc}{r}"
     title_text1 = Fore.BLUE
     title_text2 = Fore.RED 
-    tc = Fore.YELLOW
     line = Fore.CYAN
     d = line + "║"
 
 
-    print(line + "═"*100)
-    print(d," "*98,d, sep = "")
-    print(f"{d}{title_text1}{bill_tiltle1:^98}{d}")
-    print(d," "*29,Fore.MAGENTA + "-"*40," "*29,d, sep = "")
-    print(d," "*98,d, sep = "")
-    print(f"{d}{title_text2}{bill_tiltle2:^98}{d}")
-    print(d,Fore.MAGENTA + "*"*98,d, sep = "")
-    print(d," "*98,d, sep = "")
-    print(d," "*98,d, sep = "")
+    print(line + "╔",line + "═"*108,line + "╗", sep = "")
+    print(d," "*108,d, sep = "")
+    print(f"{d}{title_text1}{bill_tiltle1:^106}{d}")
+    print(d," "*33,Fore.MAGENTA + "-"*45," "*30,d, sep = "")
+    print(d," "*108,d, sep = "")
+    print(f"{d}{title_text2}{bill_tiltle2:^108}{d}")
+    print(d," "*108,d, sep = "")
+    print(d,Fore.MAGENTA + "*"*108,d, sep = "")
+    print(d," "*108,d, sep = "")
+    print(f"{d} {text_color} Name: {tc}{name:<82}{l6}  {d}")
+    print(f"{d} {text_color} Mobile No : {tc}{name:<71}{l7}  {d}")
+    print(d," "*108,d, sep = "")
     print(f"{d} Sr. Unique Code{d}{l1:^36}{d}{l2:^25}{d}{l3:^5}{d}{l4:^6}{d}{l5:^5} {d}")
 
     for i in range(len(cl)):
         print(f"{d} {i+1:^3}. {cl[i]:^12}{d}{bl[i]:^36}{d}{al[i]:^25}{d}{Cl[i]:^5}{d}{tl[i]:^5}{d}{t[i]:^5} {d}")
 
     print(d," "*98,d, sep = "")
-    print(line + "═"*100)
+    print(line + "╚",line + "═"*108,line + "╝", sep = "")
 
+#bill_printer("shvgggggggggggggghg","jvxj","8591095580",["MYTH10001","ECOCIV100001"],["MY DISCOVERY","INDIAN ECONOMY"],["Manish Pandey Dutta", "Ramesh Singh"],["23","34"],["3","4"],["69","136"],"NO")
+#ECOCIV10001	Indian Economy	Ramesh Singh	English	01-01-2014	595	8	24
+#------------------------------------------------
+#   ) Fn to call functions after login : 
+#------------------------------------------------
+
+def pre_mem():
+    a,b,c,d,cl,bl,al,Cl,tl,t = 0,0,0,0,[],[],[],[],[],[] # Initializing
+    while True:
+        print(decor2)
+        first_name = input(text_color + "Enter first name of member : ").strip().lower().title()
+
+        if first_name.isalpha() == True:
+            a = 1
+            break
+
+        else:
+            print(f"\n{error_color}⚠️  Please enter valid name\n")           
+
+    if a == 1:
+        while True:
+            print(decor2)
+            last_name = input(text_color + "Enter last name of renter : ").strip().lower().title()
+
+            if last_name.isalpha() == True:
+                b = 1
+                break
+
+            else:
+                print(f"\n{error_color}⚠️  Please enter valid name\n")
+
+    if b == 1:
+            try:
+                with open(pre_mem_path, "r") as f:
+                    data = csv.reader(f)
+                    next(data)
+                    print(Fore.YELLOW + "\nRecords Found from given inputs : ")
+                    for row in data:
+                        if (row and row[0] == first_name and row[1] == last_name):
+                            print(f"{decor2}\n{noerror_color}{row[0]} {row[1]}  :  {row[2]}\n")
+                            pn = row[2]
+                            c = 1
+        
+                            if c != 1:
+                                print(f"\n{error_color}⚠️ Name not found in data ! \n")
+                        
+            except FileNotFoundError:
+                print(filenoterror)
+
+    if c == 1:
+            while True:
+                print(decor2)
+                phone_number = input(text_color + "Enter Phone Number From above table : ")
+
+                if ( phone_number == pn):
+
+                    otp = random.randint(1000, 9999)
+                    print(f"\n{Fore.BLUE}{Style.DIM}Hint : Your OTP is: {otp}")
+                    while True:
+                        print(decor2)
+                        take_otp = input(f"{text_color}Enter otp sent on {phone_number} : ")
+
+                        if take_otp == str(otp):
+                            print(f"\n{noerror_color}✅  Member's Details Verified successfully !\n")
+                            d = 1
+                            break
+                        else:
+                            print(f"\n{error_color}⚠️ Invalid otp\n")
+
+                    break
+                else:
+                    print(f"\n{error_color}⚠️ Invalid phone number \n")
+
+    if d == 1:
+        add_more(first_name,last_name,phone_number,cl,bl,al,Cl,tl,t,r="YES")
+
+#------------------------------------------------
+#   ) Fn to call functions after login : 
+#------------------------------------------------
+
+def return_books(m):
+    a,b,c,d,nf = 0,0,0,0,[]
+    while True:
+            print(decor2)
+            first_name = input(text_color + "Enter first name of returner : ").strip().lower().title()
+    
+            if first_name.isalpha() == True:
+                a = 1
+                break
+    
+            else:
+                print(f"\n{error_color}⚠️  Please enter valid name\n")           
+    
+    if a == 1:
+        while True:
+            print(decor2)
+            last_name = input(text_color + "Enter last name of returner : ").strip().lower().title()
+    
+            if last_name.isalpha() == True:
+                b = 1
+                break
+
+            else:
+                print(f"\n{error_color}⚠️  Please enter valid name\n")
+    
+    if b == 1:
+            name = f"{first_name} {last_name}"
+            wb = load_workbook(data_path, data_only=True)
+            sheet = wb[m]
+            for row in sheet.iter_rows(min_row=2,values_only=True):
+                if name.strip().lower() == str(row[2]).strip().lower():
+                    (decor2)
+                    print(f"Name : {row[0]}  |  Phone Number : {row[1]}")
+                    pn,c = row[1],1
+                else:
+                    print("ell")
+
+            wb.save(data_path)
+    
+    if c == 1:
+            while True:
+                print(decor2)
+                phone_number = input(text_color + "Enter Phone Number From above table : ")
+
+                if ( phone_number == pn):
+                    print(decor2)
+                    print(f"{info_color}{underline('Important Instructions')}\n")
+                    print(f"\t{noerror_color}You can write multiple unique codes separated by commas.")
+                    print(f"\t{noerror_color}Example: MYTH10001, NOV10001\n")
+                    rbooks = input(text_color + "Enter unique codes of books in given format : ")
+                    books = rbooks.replace(" ","")
+                    book_list = books.split(",")
+                    for book in book_list:
+                        wd = load_workbook(data_path, data_only=True)
+                        sheet = wd[m]
+                        for row in sheet.iter_rows(min_row=2,values_only=True):
+                            if book == str(row[2]).strip() and str(row[11]) == "NO":
+                                row[11].value = "YES"
+                            else:
+                                d = 1
+                                nf.append(book)
+    
+                        wd.save(data_path)
+                    break
+                else:
+                    print(f"\n{error_color}⚠️ Invalid phone number \n")
+
+            print(f"\n{noerror_color}✅  Records Updated successfully !\n")
+    if d == 1:
+        er = ""
+        for i in nf:
+            er = er + "," + i
+            print(f"\n{error_color}⚠️ Note that book with uc : {er} not found !\n")
+
+#------------------------------------------------
+#   ) Fn to call functions after login : 
+#------------------------------------------------
+
+
+def mod_books(l,s,r):
+    for book in l:
+        wd = load_workbook(books_data_path, data_only=True)
+        sheet = wd[s]
+        for row in sheet.iter_rows(min_row=2,values_only=True):
+            if book == str(row[1]):
+                if r == "NO":
+                    row[7].value = int(row[7].value) - 1
+                elif r == "YES":
+                    row[7].value = int(row[7].value) + 1
+    
 #------------------------------------------------
 #   ) Fn to call functions after login : 
 #------------------------------------------------
