@@ -13,6 +13,7 @@ emp_data_path = r"C:\Users\HP\Desktop\training\Python\Library\Library_Data\Emplo
 books_data_path = r"C:\Users\HP\Desktop\training\Python\Library\Library_Data\Books_Data.xlsx"
 data_path = r"C:\Users\HP\Desktop\training\Python\Library\Library_Data\Data.xlsx"
 pre_mem_path = r"C:\Users\HP\Desktop\training\Python\Library\Library_Data\Pre_members_info.csv"
+notice_path = r"C:\Users\HP\Desktop\training\Python\Library\Library_Data\Notice1.txt"
 
 #-----------------------------------------------
 # Import some important libraries : 
@@ -146,7 +147,7 @@ def check_username(u):
             data = csv.reader(f)
             next(data)
             for row in data:
-                if (row and row[1] == u):
+                if (row and row[1] == u and "a" in row[5]):
                     print(f"\n{noerror_color}✅ Username Found \n")
                     return "yes"
                 
@@ -188,6 +189,42 @@ def check_password(u,p):
         print(Fore.RED + Style.BRIGHT + "\n⚠️ Please ensure that you had also cloned 'Library Data' folder from program link ⚠️")
         print(Fore.RED + Style.BRIGHT + "⚠️ Please change the default paths to the actual paths where you have saved Library Data folder, in the variable at line 12 \n")
 
+#------------------------------------------------
+#  ) Fn for taking and checking first name :
+#------------------------------------------------
+
+def notice(path):
+    print(Fore.BLUE + Style.BRIGHT + "🆕  NOTICE","\n")
+    with open(path) as f:
+        data = f.read()
+        print(Fore.GREEN + data[:101])
+        print(Fore.GREEN + data[101:201])
+        print(Fore.GREEN + data[201:301])
+        print(decor3)
+#------------------------------------------------
+#  ) Fn for taking and checking first name :
+#------------------------------------------------
+
+def instruction():
+    a = "Type 'backp' and press Enter to go to main portal directly."
+    b = "Type 'exitp' and press Enter to exit the program"
+    print(decor3)
+    print(f"{info_color}{underline('✯  Instructions  ✯')} : \n")
+    print(Fore.YELLOW + f"\t☞ Back : {a} ")
+    print(Fore.YELLOW + f"\t☞ Back : {b} \n")
+    print(decor3)
+
+def main_portal():
+    interface_title()
+    display_actions()
+
+def backp(p):
+    if p.strip().lower() == "backp":
+        main_portal()
+
+def exitp(p):
+    if p.strip().lower() == "exitp":
+        exit()
 #------------------------------------------------
 #  ) Fn for taking and checking first name :
 #------------------------------------------------
@@ -264,7 +301,6 @@ def interface_title():
                         \t║        {color2}                                      ║
                         \t╚══════════════════════════════════════════════╝''')
 
-    print("\n\n")
     
 #------------------------------------------------
 #   ) Fn to display actions' options :
@@ -564,7 +600,7 @@ def add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r="NO"):
                                 print(row[8].value)
                                 print(type(row[8].value))
                                 print(row[8])
-                                sheet.append([f"{fn} {ln}",f"{int(pn)}",row[1].value, row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value),"NO"])
+                                sheet.append([f"{fn} {ln}",f"{int(pn)}",int(row[1].value), row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value),"NO"])
                                 cl.append(row[1].value)
                                 bl.append(row[2].value)
                                 al.append(row[3].value)
@@ -586,8 +622,6 @@ def add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r="NO"):
             break
         else:
             print(f"\n{error_color}⚠️ Book with this unique code not found !\n")
-
-
 
 
 #------------------------------------------------
@@ -625,9 +659,6 @@ def record_rent_book_detail(uc):
                             e = 1
                             wd = load_workbook(data_path)
                             sheet = wd["Sheet1"]
-                            print(row[8].value)
-                            print(type(row[8].value))
-                            print(row[8])
                             sheet.append([f"{renter_data[1]} {renter_data[2]}",int(renter_data[3]),row[1].value, row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value), "NO"])
                             code_list.append(row[1].value)
                             book_list.append(row[2].value)
@@ -873,6 +904,8 @@ def mod_books(l,s,r):
 
 def after_login_display():
     interface_title()
+    instruction()
+    notice(notice_path)
     display_actions()
 
 #------------------------------------------------
@@ -1019,6 +1052,8 @@ def id():
 # Calling functions : 
 if __name__ == "__Login__":
     start_program()
+
+start_program()
 
 
 # take_sheet_name()

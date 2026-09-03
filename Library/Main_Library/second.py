@@ -234,4 +234,36 @@ def change_rate():
             row[8].value = int((int(row[6].value) * 3)/100)
     wb.save(books_data_path)         
 
+
+def add_more_exist_book():
+    print(decor2)
+    while True:
+        unique_code = input(text_color + "Enter unique code of book : ").strip()
+        wb = load_workbook(books_data_path)
+        a = 0
+        for sheet in wb.worksheets:
+            for row in sheet.iter_rows(min_row=2,values_only=False):
+                if str(row[1].value).strip() == unique_code:
+                    a = 1
+                    break
+            if a == 1:
+                break
+        if a == 1:
+            print(f"\n{noerror_color}✅ Book Found with this unique code \n")
+
+            while True:
+                print(decor2)
+                quantity = input(text_color + "Enter quantity of copies of this book to be added : ").strip()
+
+                if quantity.isdigit() and int(quantity) > 0:
+                        row[7].value = int(row[7].value) + int(quantity)
+                        wb.save(books_data_path)
+                        print(f"\n{noerror_color}✅ Data updated successfully ! \n")
+                        return
+                else:
+                    print(f"\n{error_color}⚠️ Please enter valid quantity ! (ex. 2 or 4)\n")
+        else:
+            print(f"\n{error_color}⚠️ Book with this unique code not found !\n")
+    
+
 #add_new_books()
