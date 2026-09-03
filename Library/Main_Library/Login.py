@@ -358,6 +358,19 @@ def display_actions():
 #   ) Fn to check uc by name of book :
 #------------------------------------------------
 
+def quotes():
+    pass
+
+# "Books are uniquely portable magic"
+# "Today a reader,tomorrow a leader"
+# "Read what you love until you love to read"
+# "There is no friend as loyal as a book"
+# "A book dream is a dream that you hold in your hand"
+
+#------------------------------------------------
+#   ) Fn to check uc by name of book :
+#------------------------------------------------
+
 def check_book_name():
     while True:
         print(decor2)
