@@ -402,7 +402,7 @@ def check_genre_book():
     display_genres()
     while True:
         print(decor2)
-        genre_books = input(text_color + "Enter genre of desire book from abve table : ").strip().lower()
+        genre_books = input(text_color + "Enter genre of desire book from above table : ").strip().lower()
         print(decor2)
 
         value = False
@@ -1017,8 +1017,8 @@ def id():
 
 #==================================================================================================
 # Calling functions : 
-
-start_program()
+if __name__ == "__Login__":
+    start_program()
 
 
 # take_sheet_name()
