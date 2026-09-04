@@ -359,13 +359,14 @@ def display_actions():
 #------------------------------------------------
 
 def quotes():
-    pass
+    good_quotes = ["Books are uniquely portable magic",
+                   "Today a reader,tomorrow a leader",
+                   "Read what you love until you love to read"
+                   "There is no friend as loyal as a book",
+                   "A book dream is a dream that you hold in your hand"]
+    print(Fore.MAGENTA + Style.BRIGHT + random.choice(good_quotes))
 
-# "Books are uniquely portable magic"
-# "Today a reader,tomorrow a leader"
-# "Read what you love until you love to read"
-# "There is no friend as loyal as a book"
-# "A book dream is a dream that you hold in your hand"
+
 
 #------------------------------------------------
 #   ) Fn to check uc by name of book :
@@ -703,18 +704,33 @@ def bill_printer(fn,ln,pn,cl,bl,al,Cl,tl,t,r):
     bill_tiltle2 = "( By MJJ-TechWorld )"
     l1 = "Name Of Books"
     l2 = "Name Of Authors"
-    l3 = "Charges/day"
+    l3 = "Charges/"
     l4 = "Tenure"
     l5 = "Total"
     tc = Fore.YELLOW
     l6 = f"{text_color}Date: {tc}{datetime.today().strftime('%d-%m-%Y')}"
     name = f"{fn} {ln}"
     l7 = f"{text_color}Have membership ? {tc}{r}"
+    l8 = f"{Fore.BLUE}--- Thank You Visit Again ---"
     title_text1 = Fore.BLUE
     title_text2 = Fore.RED 
     line = Fore.CYAN
     d = line + "║"
+    good_quotes = ["'Books are uniquely portable magic'",
+                   "'Today a reader,tomorrow a leader'",
+                   "'Read what you love until you love to read'"
+                   "'There is no friend as loyal as a book'",
+                   "'A book dream is a dream that you hold in your hand'"]
+    q = Fore.YELLOW + Style.BRIGHT + random.choice(good_quotes)
 
+
+
+    total = 0
+    if r == "NO":
+        for i in t:
+            total = total + int(i)
+    else:
+        total = 0
 
     print(line + "╔",line + "═"*108,line + "╗", sep = "")
     print(d," "*108,d, sep = "")
@@ -726,18 +742,30 @@ def bill_printer(fn,ln,pn,cl,bl,al,Cl,tl,t,r):
     print(d,Fore.MAGENTA + "*"*108,d, sep = "")
     print(d," "*108,d, sep = "")
     print(f"{d} {text_color} Name: {tc}{name:<82}{l6}  {d}")
-    print(f"{d} {text_color} Mobile No : {tc}{pn:<71}{l7}  {d}")
+    print(f"{d} {text_color} Mobile No : {tc}{pn:<71} {l7}  {d}")
     print(d," "*108,d, sep = "")
-    print(f"{d} Sr. Unique Code{d}{l1:^36}{d}{l2:^25}{d}{l3:^5}{d}{l4:^6}{d}{l5:^5} {d}")
+    print(d,Fore.BLUE + "*"*108,d, sep = "")
+    print(d," "*108,d, sep = "")
+    print(d,Fore.YELLOW + "="*108,d, sep = "")
+    print(f"{d} Sr. {d} Unique Code {d}{l1:^36}{d}{l2:^25}{d} {l3:^8}{d}{l4:^6}{d}{l5:^7} {d}")
+    print(d," "*5,d," "*13,d," "*36,d," "*25,d,Fore.CYAN + "    day  ",d," "*6,d," "*8,d, sep = "")
+    print(d,Fore.YELLOW + "="*108,d, sep = "")
 
     for i in range(len(cl)):
-        print(f"{d} {i+1:^3}. {cl[i]:^12}{d}{bl[i]:^36}{d}{al[i]:^25}{d}{Cl[i]:^5}{d}{tl[i]:^5}{d}{t[i]:^5} {d}")
+        print(f"{d} {i+1:^3}.  {cl[i]:^12}{d}{bl[i]:^36}{d}{al[i]:^25}{d}{Cl[i]:^9}{d}{tl[i]:^6}{d}{t[i]:^7} {d}")
 
-    print(d," "*98,d, sep = "")
+    
+    print(d,Fore.YELLOW + " "*108,d, sep = "")
+    print(d,Fore.YELLOW + "="*108,d, sep = "")
+    print(d," "*86,f"{Fore.GREEN}{Style.BRIGHT}Total : Rs {total:^7}/-  ",   d,sep = "")
+    print(d," "*108,d, sep = "")
+    print(d,Fore.MAGENTA + "*"*108,d, sep = "")
+    print(d,f"{l8:^113}",d,sep = "")
+    print(d,Fore.MAGENTA + "*"*108,d, sep = "")
+    print(d,f"{q:^117}",d, sep = "")
+
     print(line + "╚",line + "═"*108,line + "╝", sep = "")
 
-#bill_printer("shvgggggggggggggghg","jvxj","8591095580",["MYTH10001","ECOCIV100001"],["MY DISCOVERY","INDIAN ECONOMY"],["Manish Pandey Dutta", "Ramesh Singh"],["23","34"],["3","4"],["69","136"],"NO")
-#ECOCIV10001	Indian Economy	Ramesh Singh	English	01-01-2014	595	8	24
 #------------------------------------------------
 #   ) Fn to call functions after login : 
 #------------------------------------------------
@@ -1066,7 +1094,7 @@ def id():
 if __name__ == "__Login__":
     start_program()
 
-start_program()
+#start_program()
 
 
 # take_sheet_name()
