@@ -1,13 +1,7 @@
-#======================== - -       Backend       - - ==============================
+#============  Backend =================
 
-#******************  WELCOME TO DIGITAL LIBRARY OF NAVI MUMBAI  ********************
+#*** WELCOME TO DIGITAL LIBRARY OF NAVI MUMBAI ***
 
-#===================================================================================
-
-
-# Important Note : ✖️✅➤⚠️
-# Please ensure that you had also cloned "Data.txt" file from program link -
-# Please change the default path of "Data.txt" to the actual path where you have saved "Data.txt" file -
 
 emp_data_path = r"C:\Users\HP\Desktop\training\Python\Library\Library_Data\Employee_details.csv"
 books_data_path = r"C:\Users\HP\Desktop\training\Python\Library\Library_Data\Books_Data.xlsx"
@@ -611,10 +605,7 @@ def add_more(fn,ln,pn,cl,bl,al,Cl,tl,t,r="NO"):
                                 c = 1
                                 wd = load_workbook(data_path)
                                 sheet = wd[sn]
-                                print(row[8].value)
-                                print(type(row[8].value))
-                                print(row[8])
-                                sheet.append([f"{fn} {ln}",f"{int(pn)}",int(row[1].value), row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value),"NO"])
+                                sheet.append([f"{fn} {ln}",f"{int(pn)}",row[1].value, row[2].value, row[3].value, row[6].value, row[8].value, issue_date, int(tenure), due_date, int(tenure)*int(row[8].value),"NO"])
                                 cl.append(row[1].value)
                                 bl.append(row[2].value)
                                 al.append(row[3].value)
@@ -752,7 +743,7 @@ def bill_printer(fn,ln,pn,cl,bl,al,Cl,tl,t,r):
     print(d,Fore.YELLOW + "="*108,d, sep = "")
 
     for i in range(len(cl)):
-        print(f"{d} {i+1:^3}.  {cl[i]:^12}{d}{bl[i]:^36}{d}{al[i]:^25}{d}{Cl[i]:^9}{d}{tl[i]:^6}{d}{t[i]:^7} {d}")
+        print(f"{d} {i+1:^3}.{d} {cl[i]:^12}{d}{bl[i]:^36}{d}{al[i]:^25}{d}{Cl[i]:^9}{d}{tl[i]:^6}{d}{t[i]:^7} {d}")
 
     
     print(d,Fore.YELLOW + " "*108,d, sep = "")
@@ -845,7 +836,7 @@ def pre_mem():
 #------------------------------------------------
 
 def return_books(m):
-    a,b,c,d,nf = 0,0,0,0,[]
+    a,b,c,nf,s,updated_books = 0,0,0,[],set(),[]
     while True:
             print(decor2)
             first_name = input(text_color + "Enter first name of returner : ").strip().lower().title()
@@ -873,53 +864,70 @@ def return_books(m):
             name = f"{first_name} {last_name}"
             wb = load_workbook(data_path, data_only=True)
             sheet = wb[m]
+            print(decor2)
+            print(f"{Fore.BLUE}Phone Numbers associated with this name : ")
             for row in sheet.iter_rows(min_row=2,values_only=True):
                 if name.strip().lower() == str(row[0]).strip().lower():
-                    print(decor2)
-                    print(f"{Fore.YELLOW}Name : {row[0]}  |  Phone Number : {row[1]}")
+                    s.add(f"{row[1]}")
                     pn,c = row[1],1
-                else:
-                    print("ell")
-                    print(row[2])
-
+            for i in s:
+                print(Fore.YELLOW + i)
             wb.save(data_path)
     
-    if c == 1:
-            while True:
+    if c == 1:     
+        while True:
+            print(decor2)
+            phone_number = input(text_color + "Enter Phone Number From above table : ")
+
+            if ( int(phone_number) == pn):
                 print(decor2)
-                phone_number = input(text_color + "Enter Phone Number From above table : ")
+                print(f"{info_color} Books remaining to be returned : \n")
+                wd = load_workbook(data_path, data_only=False)
+                sheet = wd[m]
+                for row in sheet.iter_rows(min_row=2):
+                    if str(row[11].value) == "NO":
+                        print(Fore.YELLOW + row[2].value,  row[3].value)
+                print(decor2)
+                print(f"{info_color}{underline('Important Instructions')}\n")
+                print(f"\t{noerror_color}You can write multiple unique codes separated by commas.")
+                print(f"\t{noerror_color}Example: MYTH10001, NOV10001\n")
+                rbooks = input(text_color + "Enter unique codes of books in given format : ")
+                books = rbooks.replace(" ","")
+                book_list = books.split(",")
+                for book in book_list:
+                    book = book.strip()
+                    if not book:
+                        continue
+                    found = False
 
-                if ( phone_number == pn):
-                    print(decor2)
-                    print(f"{info_color}{underline('Important Instructions')}\n")
-                    print(f"\t{noerror_color}You can write multiple unique codes separated by commas.")
-                    print(f"\t{noerror_color}Example: MYTH10001, NOV10001\n")
-                    rbooks = input(text_color + "Enter unique codes of books in given format : ")
-                    books = rbooks.replace(" ","")
-                    book_list = books.split(",")
-                    for book in book_list:
-                        wd = load_workbook(data_path, data_only=False)
-                        sheet = wd[m]
-                        for row in sheet.iter_rows(min_row=2):
-                            if book.strip() == str(row[2].value) and str(row[11].value) == "NO":
-                                row[11].value = "YES"
-                                mod_books(book_list,m,"YES")
-                            else:
-                                d = 1
-                                #print(row[2],row[11])
-                                nf.append(book)
-    
-                        wd.save(data_path)
-                    break
-                else:
-                    print(pn)
-                    print(f"\n{error_color}⚠️ Invalid phone number \n")
+                    for row in sheet.iter_rows(min_row=2):
+                        if book == str(row[2].value) and str(row[11].value) == "NO":
+                            row[11].value = "YES"
+                            found = True
+                            mod_books(book_list,m,"YES")
+                            updated_books.append(book)
+                            break
+                    if not found:
+                        nf.append(book)
 
-            print(f"\n{noerror_color}✅  Records Updated successfully !\n")
-    if d == 1:
-        er =str(nf).replace("[","")
-        er = er.replace("]","")
-        print(f"\n{error_color}⚠️  Note that book with uc : {er} not found !\n")
+                wd.save(data_path)
+                if len(updated_books) > 0:
+                    print(f"\n{noerror_color}✅  Records Updated successfully !\n")
+                    mod_books(updated_books,m,"YES")
+
+                if len(updated_books) == 0:
+                    print(f"\n{noerror_color}✅  Nothing Updated already marked yes!\n")
+
+                if len(nf) > 0:
+                    er =str(nf).replace("[","")
+                    er = er.replace("]","")
+                    print(f"\n{error_color}⚠️  Note that book with uc : {er} not found !\n")
+
+                break
+            else:
+                print(pn)
+                print(f"\n{error_color}⚠️ Invalid phone number \n")
+
 
 #------------------------------------------------
 #   ) Fn to call functions after login : 
@@ -948,7 +956,6 @@ def after_login_display():
     instruction()
     notice(notice_path)
     display_actions()
-
 #------------------------------------------------
 #   ) Fn for actual login portal
 #------------------------------------------------
@@ -1091,10 +1098,9 @@ def id():
 
 #==================================================================================================
 # Calling functions : 
-if __name__ == "__Login__":
+if __name__ == "__main__":
     start_program()
 
-#start_program()
 
 
 # take_sheet_name()
